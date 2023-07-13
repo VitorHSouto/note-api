@@ -8,6 +8,8 @@ namespace note_api.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<NoteEntity> note { get; set; }
+        public DbSet<UserEntity> user { get; set; }
+        public DbSet<UserNoteEntity> usernote { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

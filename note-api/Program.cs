@@ -2,6 +2,8 @@
 using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
 using note_api.Data;
+using note_api.Repositories;
+using note_api.Services;
 
 namespace note_api
 {
@@ -29,6 +31,12 @@ namespace note_api
             {
                 UpdateDatabase(scope.ServiceProvider);
             }
+
+            builder.Services.AddScoped<NoteService>();
+
+            builder.Services.AddScoped<NoteRepository>();
+
+            builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
             var app = builder.Build();
 

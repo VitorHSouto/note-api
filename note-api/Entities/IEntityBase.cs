@@ -7,7 +7,8 @@ namespace note_api.Entities
         public IEntityBase()
         {
             Id = new Guid();
-            CreatedAt = DateTime.Now.ToUniversalTime();
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
             Active = true;
         }
 
@@ -16,6 +17,9 @@ namespace note_api.Entities
 
         [Column("createdat")]
         public DateTime CreatedAt { get; set; }
+
+        [Column("updatedat")]
+        public DateTime UpdatedAt { get; set; }
 
         [Column("active")]
         public bool Active { get; set; }
