@@ -33,7 +33,7 @@ namespace note_api.Repositories
 
         public async Task<List<T>> ListAll()
         {
-            return await table.ToListAsync();
+            return await table.OrderByDescending(item => item.UpdatedAt).ToListAsync();
         }
 
         public async Task<T> Insert(T entity)
