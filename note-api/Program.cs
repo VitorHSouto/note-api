@@ -38,6 +38,16 @@ namespace note_api
 
             builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -48,9 +58,8 @@ namespace note_api
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
+            app.UseCors();
             app.MapControllers();
 
             app.Run();
