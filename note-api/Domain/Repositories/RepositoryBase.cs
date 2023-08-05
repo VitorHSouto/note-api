@@ -58,7 +58,7 @@ namespace note_api.Domain.Repositories
             return await table.OrderByDescending(item => item.UpdatedAt).ToListAsync();
         }
 
-        public async Task<T> Insert(T entity)
+        public async Task<T> Save(T entity)
         {
             table.Add(entity);
             await _dbContext.SaveChangesAsync();

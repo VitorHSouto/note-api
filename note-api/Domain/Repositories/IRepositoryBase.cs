@@ -4,7 +4,7 @@
     {
         public Task<List<T>> ListAll();
         public Task<T?> GetById(Guid Id);
-        public Task<T?> Insert(T entity);
+        public Task<T?> Save(T entity);
         public Task<T?> Update(T entity);
         public Task<bool> Delete(Guid id);
     }

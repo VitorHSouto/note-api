@@ -16,25 +16,25 @@ namespace note_api.Controllers
         }
 
         [HttpGet("")]
-        public async Task<List<NoteEntity>> ListAll()
+        public async Task<List<NoteDTO>> ListAll()
         {
             return await _noteService.ListAll();
         }
 
         [HttpGet("{id}")]
-        public async Task<NoteEntity> Get(Guid id)
+        public async Task<NoteDTO> Get(Guid id)
         {
             return await _noteService.GetById(id);
         }
 
         [HttpPost("")]
-        public async Task<NoteEntity> Save(CreateNoteRequestDTO req)
+        public async Task<NoteDTO> Save(CreateNoteRequestDTO req)
         {
             return await _noteService.Save(req);
         }
 
         [HttpPut("{id}")]
-        public async Task<NoteEntity> Update(Guid id, CreateNoteRequestDTO req)
+        public async Task<NoteDTO> Update(Guid id, CreateNoteRequestDTO req)
         {
             return await _noteService.Update(id, req);
         }

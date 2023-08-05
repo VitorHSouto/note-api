@@ -13,17 +13,19 @@ namespace note_api.Domain.Services
             _noteRepository = noteRepository;
         }
 
-        public async Task<List<NoteEntity>> ListAll()
+        public async Task<List<NoteDTO>> ListAll()
         {
-            return await _noteRepository.ListAll();
+            var entities = await _noteRepository.ListAll();
+            return entities.Select(entity => ToDTO(entity)).ToList();
         }
 
-        public async Task<NoteEntity> GetById(Guid id)
+        public async Task<NoteDTO> GetById(Guid id)
         {
-            return await _noteRepository.GetById(id);
+            var entity = await _noteRepository.GetById(id);
+            return ToDTO(entity);
         }
 
-        public async Task<NoteEntity> Save(CreateNoteRequestDTO req)
+        public async Task<NoteDTO> Save(CreateNoteRequestDTO req)
         {
             ValidateCreateNoteRequestDTO(req);
 
@@ -31,12 +33,13 @@ namespace note_api.Domain.Services
             entity.Title = req.Title;
             entity.Content = req.Content;
 
-            return await _noteRepository.Insert(entity);
+            await _noteRepository.Save(entity);
+            return ToDTO(entity);
         }
 
-        public async Task<NoteEntity> Update(Guid id, CreateNoteRequestDTO req)
+        public async Task<NoteDTO> Update(Guid id, CreateNoteRequestDTO req)
         {
-            var entity = await GetById(id);
+            var entity = await _noteRepository.GetById(id);
             if (entity == null)
                 throw new Exception("Não foi possível encontrar essa anotação.");
 
@@ -45,7 +48,8 @@ namespace note_api.Domain.Services
             entity.Title = req.Title;
             entity.Content = req.Content;
 
-            return await _noteRepository.Update(entity);
+            await _noteRepository.Update(entity);
+            return ToDTO(entity);
         }
 
         public async Task<bool> Delete(Guid id)
@@ -66,6 +70,14 @@ namespace note_api.Domain.Services
 
             if (req.Title?.Length > 2048)
                 throw new Exception("O limite de caracteres do conteúdo é de 2048");
+        }
+
+        private NoteDTO ToDTO(NoteEntity entity)
+        {
+            var dto = new NoteDTO(entity);
+            dto.Title = entity.Title;
+            dto.Content = entity.Content;
+            return dto;
         }
     }
 }
