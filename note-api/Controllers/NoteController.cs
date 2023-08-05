@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using note_api.Domain.DTOs;
-using note_api.Entities;
-using note_api.Services;
+using note_api.Domain.Entities;
+using note_api.Domain.Services;
+using note_api.DTOs.Core;
 
 namespace note_api.Controllers
 {

@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using note_api.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace note_api.Entities
+namespace note_api.Domain.Entities
 {
     public class NoteEntity : IEntityBase
     {

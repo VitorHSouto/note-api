@@ -1,14 +1,15 @@
-﻿using note_api.Domain.DTOs;
-using note_api.Entities;
-using note_api.Repositories;
+﻿using note_api.Domain.Repositories;
+using note_api.DTOs.Core;
+using note_api.Domain.Entities;
 using static Dapper.SqlMapper;
 
-namespace note_api.Services
+namespace note_api.Domain.Services
 {
     public class NoteService
     {
         private NoteRepository _noteRepository;
-        public NoteService(NoteRepository noteRepository) { 
+        public NoteService(NoteRepository noteRepository)
+        {
             _noteRepository = noteRepository;
         }
 

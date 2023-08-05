@@ -1,4 +1,4 @@
-﻿namespace note_api.Domain.DTOs
+﻿namespace note_api.DTOs.Core
 {
     public class CreateNoteRequestDTO
     {

@@ -1,7 +1,7 @@
 ﻿using note_api.Data;
-using note_api.Entities;
+using note_api.Domain.Entities;
 
-namespace note_api.Repositories
+namespace note_api.Domain.Repositories
 {
     public class NoteRepository : RepositoryBase<NoteEntity>
     {

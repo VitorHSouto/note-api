@@ -1,6 +1,4 @@
-﻿
-
-namespace note_api.Repositories
+﻿namespace note_api.Domain.Repositories
 {
     public interface IRepositoryBase<T> where T : class
     {

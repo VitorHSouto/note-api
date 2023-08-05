@@ -2,8 +2,8 @@
 using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
 using note_api.Data;
-using note_api.Repositories;
-using note_api.Services;
+using note_api.Domain.Repositories;
+using note_api.Domain.Services;
 
 namespace note_api
 {

@@ -9,7 +9,7 @@ using System.Data.Common;
 using System.Dynamic;
 using System.Reflection;
 
-namespace note_api.Repositories
+namespace note_api.Domain.Repositories
 {
     public class RepositoryBase<T> : IRepositoryBase<T> where T : IEntityBase
     {
@@ -103,14 +103,14 @@ namespace note_api.Repositories
                 else if (property.PropertyType == typeof(Guid?))
                 {
                     var value = property.GetValue(entity);
-                    parameters[property.Name.ToLower()] = !object.Equals(value, Guid.Empty) ? (Guid?)value : (Guid?)null;
+                    parameters[property.Name.ToLower()] = !Equals(value, Guid.Empty) ? (Guid?)value : null;
                 }
-                else if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(System.Nullable<>))
+                else if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
                     var underlyingType = Nullable.GetUnderlyingType(property.PropertyType);
                     var value = underlyingType.IsEnum ? property.GetValue(entity)?.ToString() : property.GetValue(entity);
                     var defaultValue = GetDefault(underlyingType);
-                    parameters[property.Name] = object.Equals(value, defaultValue) ? null : value;
+                    parameters[property.Name] = Equals(value, defaultValue) ? null : value;
                 }
                 else
                 {
@@ -122,14 +122,14 @@ namespace note_api.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-       public static object GetDefault(Type type) 
-       { 
+        public static object GetDefault(Type type)
+        {
             if (type.IsValueType)
             {
                 return Activator.CreateInstance(type);
             }
             return null;
-       }
+        }
     }
 
 }

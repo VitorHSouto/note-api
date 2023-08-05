@@ -1,10 +1,10 @@
 ﻿using FluentMigrator;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace note_api.Migrations
+namespace note_api.Domain.Migrations
 {
     [Migration(202307122000)]
-    public class Migration_202307122000 : FluentMigrator.Migration
+    public class Migration_202307122000 : Migration
     {
         public override void Down()
         {

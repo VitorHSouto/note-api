@@ -1,13 +1,13 @@
 ﻿using FluentMigrator;
 
-namespace note_api.Migrations
+namespace note_api.Domain.Migrations
 {
     [Migration(202307122030)]
-    public class Migration_202307122030 : FluentMigrator.Migration
+    public class Migration_202307122030 : Migration
     {
         public override void Down()
         {
-            
+
         }
 
         public override void Up()
