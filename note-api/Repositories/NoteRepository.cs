@@ -5,7 +5,7 @@ namespace note_api.Repositories
 {
     public class NoteRepository : RepositoryBase<NoteEntity>
     {
-        public NoteRepository(ApplicationDbContext dbContext) : base(dbContext)
+        public NoteRepository(ApplicationDbContext dbContext) : base(dbContext, "note")
         {
 
         }

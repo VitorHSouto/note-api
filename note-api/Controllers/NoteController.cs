@@ -33,6 +33,12 @@ namespace note_api.Controllers
             return await _noteService.Save(req);
         }
 
+        [HttpPut("{id}")]
+        public async Task<NoteEntity> Update(Guid id, CreateNoteRequestDTO req)
+        {
+            return await _noteService.Update(id, req);
+        }
+
         [HttpDelete("{id}")]
         public async Task<bool> Delete(Guid id)
         {

@@ -33,6 +33,20 @@ namespace note_api.Services
             return await _noteRepository.Insert(entity);
         }
 
+        public async Task<NoteEntity> Update(Guid id, CreateNoteRequestDTO req)
+        {
+            var entity = await GetById(id);
+            if (entity == null)
+                throw new Exception("Não foi possível encontrar essa anotação.");
+
+            ValidateCreateNoteRequestDTO(req);
+
+            entity.Title = req.Title;
+            entity.Content = req.Content;
+
+            return await _noteRepository.Update(entity);
+        }
+
         public async Task<bool> Delete(Guid id)
         {
             return await _noteRepository.Delete(id);
