@@ -1,9 +1,14 @@
 
 using FluentMigrator.Runner;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
+using note_api.Controllers;
 using note_api.Data;
 using note_api.Domain.Repositories;
 using note_api.Domain.Services;
+using System.Text;
 
 namespace note_api
 {
@@ -23,6 +28,9 @@ namespace note_api
             var connection = builder.Configuration.GetConnectionString("DataBase");
             builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseNpgsql(connection));
 
+            //Autenticação com JWT
+            ConfigureJWTAuthentication(builder);
+
             // Configuração do serviço
             var serviceProvider = CreateServices();
 
@@ -32,9 +40,7 @@ namespace note_api
                 UpdateDatabase(scope.ServiceProvider);
             }
 
-            builder.Services.AddScoped<NoteService>();
-
-            builder.Services.AddScoped<NoteRepository>();
+            AddServices(builder);
 
             builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 
@@ -58,11 +64,44 @@ namespace note_api
             }
 
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors();
             app.MapControllers();
 
             app.Run();
+        }
+
+        private static void AddServices(WebApplicationBuilder builder)
+        {
+            builder.Services.AddScoped<LoginService>();
+
+            builder.Services.AddScoped<NoteService>();
+            builder.Services.AddScoped<NoteRepository>();
+
+            builder.Services.AddScoped<UserService>();
+            builder.Services.AddScoped<UserRepository>();
+        }
+
+        private static void ConfigureJWTAuthentication(WebApplicationBuilder builder)
+        {
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Settings.JwtSecret)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
 
         private static IServiceProvider CreateServices()

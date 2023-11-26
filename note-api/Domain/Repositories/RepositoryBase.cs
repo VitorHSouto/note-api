@@ -91,44 +91,22 @@ namespace note_api.Domain.Repositories
             return updateEntity;
         }
 
-        public async Task Teste2(T entity)
+        public async Task<T> QueryFirstOrDefaultAsync(string query, object parameters = null)
         {
-            string updateQuery = $"UPDATE {_tableName} SET {_mergedColumns} WHERE id = @id";
-
-            var parameters = new ExpandoObject() as IDictionary<string, object?>;
-            foreach (var property in _allProperties)
+            using (var connection = new NpgsqlConnection(_dbContext.Database.GetConnectionString()))
             {
-                if (property.PropertyType.IsEnum)
-                    parameters[property.Name] = property.GetValue(entity)?.ToString();
-                else if (property.PropertyType == typeof(Guid?))
-                {
-                    var value = property.GetValue(entity);
-                    parameters[property.Name.ToLower()] = !Equals(value, Guid.Empty) ? (Guid?)value : null;
-                }
-                else if (property.PropertyType.IsGenericType && property.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
-                {
-                    var underlyingType = Nullable.GetUnderlyingType(property.PropertyType);
-                    var value = underlyingType.IsEnum ? property.GetValue(entity)?.ToString() : property.GetValue(entity);
-                    var defaultValue = GetDefault(underlyingType);
-                    parameters[property.Name] = Equals(value, defaultValue) ? null : value;
-                }
-                else
-                {
-                    parameters[property.Name.ToLower()] = property?.GetGetMethod()?.Invoke(entity, null);
-                }
+                connection.Open();
+                return (await connection.QueryFirstOrDefaultAsync<T>(query, parameters));
             }
-
-            await _dbContext.Database.ExecuteSqlRawAsync(updateQuery, parameters);
-            await _dbContext.SaveChangesAsync();
         }
 
-        public static object GetDefault(Type type)
+        public async Task<List<T>> QueryAsync(string query, object parameters = null)
         {
-            if (type.IsValueType)
+            using (var connection = new NpgsqlConnection(_dbContext.Database.GetConnectionString()))
             {
-                return Activator.CreateInstance(type);
+                connection.Open();
+                return (await connection.QueryAsync<T>(query, parameters)).ToList();
             }
-            return null;
         }
     }
 
